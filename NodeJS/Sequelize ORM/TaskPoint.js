@@ -1,6 +1,24 @@
 const express = require('express')
 const {Sequelize,Task} = require('./models')
 const router = express.Router()
+router.get('/all',async (req,res)=>{
+    result = await Task.findAll()
+    console.log(result)
+    if(result.length == 0) res.send("no such thing")
+    send = `` 
+
+    for(let i=0;i<result.length;i++)
+    {
+        let element = result[i]
+        console.log(element)
+        send+=`## Task ${i+1} ##
+        Id: ${element.dataValues.id}
+        Name: ${element.dataValues.name}
+
+        `
+    };
+    res.send(send)
+})
 router.get('/:id',async (req,res)=>{
     result = await Task.findAll({
         limit:1,
@@ -48,7 +66,7 @@ router.post('/:id/:taskName/:userId',async (req,res)=>{
             userId:req.params.userId
             }
         ).catch((err)=>{res.send(err)});
-        res.send(`Task Created!: ${newTask.toJSON()}`)
+        res.send(`Task Created!`)
     }
 )
 
